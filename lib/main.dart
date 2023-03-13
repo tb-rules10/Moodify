@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'bottomNav.dart';
+// import 'bottomNav.dart';
+import 'components/navbar2.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,9 +11,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF0A0E21),
+          backgroundColor: Colors.transparent,
         ),
-        scaffoldBackgroundColor: Color(0xFF0A0E21),
+        scaffoldBackgroundColor: Color(0xFF270070),
       ),
       home: BottomNav(),
     );
