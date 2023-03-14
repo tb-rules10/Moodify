@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:demo_music/pages/HomePage.dart';
 import 'package:demo_music/pages/RadioPage.dart';
 import 'package:demo_music/pages/SearchPage.dart';
-import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+
+import '../pages/Assistant.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class _BottomNavState extends State<BottomNav> {
     HomePage(),
     SearchPage(),
     RadioHS(),
-    SearchPage(),
+    AssistantPage(),
   ];
   final PageController controller = PageController();
   @override
