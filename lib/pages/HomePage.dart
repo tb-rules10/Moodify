@@ -1,6 +1,6 @@
+import '../components/ResultsPage.dart';
 import 'package:flutter/material.dart';
 import '../components/customtextfield.dart';
-import 'package:http/http.dart';
 import '../constants.dart';
 
 
@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  final TextEditingController seacrhtext = TextEditingController();
+  final TextEditingController myController = TextEditingController();
   bool isactive1 = true;
   bool isactive2 = false;
 
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Container(
                         child: Image.asset('assets/images/bababa.png'),
-                      )
+                      ),
                     ]
                 ),
                 const SizedBox(
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 55,
                 ),
-                customTextField("Type here",Icons.search,false, seacrhtext,),
+                customTextField("Type here",Icons.search,false, myController,),
                 const SizedBox(
                   height: 20,
                 ),
@@ -142,7 +142,20 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     width: 150,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        setState(() {
+                          postData(myController.text).then((result) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResultsPage(
+                                  output: result,
+                                ),
+                              ),
+                            );
+                          });
+                        });
+                      },
                       style: ButtonStyle(
                         backgroundColor:  MaterialStateProperty.all<Color>(Colors.deepOrangeAccent),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -249,7 +262,8 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: isactive2 ? Colors.white : Colors.black,
-                                ),),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -257,7 +271,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
