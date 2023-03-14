@@ -9,11 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
         ),
-        scaffoldBackgroundColor: Color(0xFF270070),
+        scaffoldBackgroundColor: Color(0xFF401141),
       ),
       home: BottomNav(),
     );

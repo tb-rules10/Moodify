@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:demo_music/models/API-Model.dart';
 import 'package:demo_music/components/videoPlayer.dart';
+import '../constants.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -16,14 +17,8 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController myController = TextEditingController();
   bool showResults = false;
   List<RecentSearch> recentSearches = [];
+  // List<RecentSearch> recentSearches = [];
   List<Video> videos = [];
-  late RecentSearch obj;
-
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    myController.dispose();
-    super.dispose();
-  }
 
   searchYoutube(String query) async {
     const apiKey = "AIzaSyCZB6jgkENt3fNy5PIY4LYGPJT5TfHn8XE";
@@ -45,19 +40,22 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 150,
+          elevation: 0,
           flexibleSpace: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  height: 20,
+                  height: 25,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     if (showResults)
                       MaterialButton(
@@ -75,7 +73,7 @@ class _SearchPageState extends State<SearchPage> {
                         },
                       ),
                     Container(
-                      width: (showResults) ? 320 : 350,
+                      width: (showResults) ? width*0.785 : width,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 0.0, horizontal: 15),
@@ -83,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
                           controller: myController,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
-                              hintText: "Search on Youtube",
+                              hintText: "What do yo want to listen to?",
                               hintStyle: TextStyle(color: Colors.black),
                               fillColor: Colors.white,
                               filled: true,
@@ -113,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 10.0),
+                      vertical: 15.0, horizontal: 15.0),
                   child: Text(
                     (showResults) ? "Search Results" : "Recently Played",
                     style: const TextStyle(
@@ -129,43 +127,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         body: Container(
           height: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                // Color(0xFF2E0530),
-                // Color(0xFF200420),
-                // Color(0xFF170316),
-                // Color(0xFF060106),
-                // Color(0xFF070107),
-                // Color(0xFF1A031B),
-
-                // Color(0xFF401141),
-                // Color(0xFF3D113E),
-                // Color(0xFF381139),
-                // Color(0xFF2E0530),
-                // Color(0xFF2B112C),
-                // Color(0xFF261026),
-                // Color(0xFF200420),
-                // Color(0xFF1A0F1A),
-                // Color(0xFF170316),
-                // Color(0xFF060106),
-                // Color(0xFF070107),
-
-                Color(0xFF270070),
-                Color(0xFF270183),
-                Color(0xFF270082),
-                Color(0xFF270065),
-                Color(0xFF280048),
-                Color(0xFF280047),
-                Color(0xFF280047),
-                Color(0xFF280047),
-                Color(0xFF280047),
-
-              ],
-            ),
-          ),
+          decoration: kBoxDecoration,
           child: (showResults)
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -176,15 +138,16 @@ class _SearchPageState extends State<SearchPage> {
                       leading: Image.network(videos[index].thumbnailUrl),
                       title: Text(videos[index].title),
                       subtitle: Text(videos[index].channelTitle),
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.transparent),
+                      ),
                       onTap: () => {
                         recentSearches.add(RecentSearch(id: videos[index].id, title: videos[index].title, thumbnailUrl: videos[index].thumbnailUrl)),
-                        print(
-                            "##############################################################################################################################################################"),
-                        print(videos[index].id),
-                        print(videos[index].title),
-                        print(videos[index].thumbnailUrl),
-                        print(
-                            "##############################################################################################################################################################"),
+                        // print("##############################################################################################################################################################"),
+                        // print(videos[index].id),
+                        // print(videos[index].title),
+                        // print(videos[index].thumbnailUrl),
+                        // print("##############################################################################################################################################################"),
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -203,9 +166,12 @@ class _SearchPageState extends State<SearchPage> {
                   itemCount: recentSearches.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading:
-                          Image.network(recentSearches[index].thumbnailUrl),
+                      leading:Image.network(recentSearches[index].thumbnailUrl),
+                      subtitle: null,
                       title: Text(videos[index].title),
+                      shape: const RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.transparent),
+                      ),
                       onTap: () => {
                         Navigator.push(
                           context,
