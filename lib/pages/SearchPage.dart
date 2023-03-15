@@ -81,7 +81,7 @@ class _SearchPageState extends State<SearchPage> {
                           controller: myController,
                           style: TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
-                              hintText: "What do yo want to listen to?",
+                              hintText: "What do you want to listen to?",
                               hintStyle: TextStyle(color: Colors.black),
                               fillColor: Colors.white,
                               filled: true,

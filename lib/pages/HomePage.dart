@@ -1,8 +1,6 @@
 import '../components/ResultsPage.dart';
 import 'package:flutter/material.dart';
-import '../components/customtextfield.dart';
 import '../constants.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,10 +10,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final TextEditingController myController = TextEditingController();
   bool isactive1 = true;
   bool isactive2 = false;
+  String username = "Emily";
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +25,27 @@ class _HomePageState extends State<HomePage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
-
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20,MediaQuery.of(context).size.height * 0.06,20,0),
+            padding: EdgeInsets.fromLTRB(
+                20, MediaQuery.of(context).size.height * 0.06, 20, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
+              children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [SizedBox(
-                          height: 3,
-                        ),
-                          Text("Hello User",
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontFamily: 'OpenSans',
+                        children: <Widget>[
+                          const SizedBox(
+                            height: 3,
                           ),
-                          textAlign: TextAlign.left,
-                    ),
+                          Text(
+                            "Hello $username",
+                            style: kHomepageText,
+                            textAlign: TextAlign.left,
+                          ),
                           SizedBox(
                             height: 5,
                           ),
@@ -66,18 +61,19 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         child: Image.asset('assets/images/bababa.png'),
                       ),
-                    ]
-                ),
+                    ],),
                 const SizedBox(
                   height: 30,
                 ),
-                const Text("Moods",
-                  style:TextStyle(
+                const Text(
+                  "Moods",
+                  style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontFamily: 'Outfit',
-                  ),),
+                  ),
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -134,7 +130,14 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 55,
                 ),
-                customTextField("Type here",Icons.search,false, myController,),
+                customTextField(
+                  (isactive1)
+                      ? "How are you feeling?"
+                      : "What's your favourite song?",
+                  Icons.search,
+                  false,
+                  myController,
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -157,8 +160,10 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       style: ButtonStyle(
-                        backgroundColor:  MaterialStateProperty.all<Color>(Colors.deepOrangeAccent),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.deepOrangeAccent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                             side: const BorderSide(color: Colors.black),
@@ -168,9 +173,13 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          Icon(Icons.search,color: Colors.white,),
+                          Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
                           SizedBox(width: 8.0),
-                          Text('Search',
+                          Text(
+                            'Search',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -185,18 +194,18 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 55,
                 ),
-                const Text("Recommend By",
+                const Text(
+                  "Recommend By",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                     fontFamily: 'Outfit',
                     color: Colors.white,
-                  ),),
-
+                  ),
+                ),
                 const SizedBox(
                   height: 22.5,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                   child: Row(
@@ -213,8 +222,12 @@ class _HomePageState extends State<HomePage> {
                             });
                           },
                           style: ButtonStyle(
-                            backgroundColor:  MaterialStateProperty.all<Color>(isactive1 ? Colors.deepOrangeAccent : Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                isactive1
+                                    ? Colors.deepOrangeAccent
+                                    : Colors.white),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: const BorderSide(color: Colors.black),
@@ -224,13 +237,19 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.emoji_emotions_rounded,color: isactive1 ? Colors.white : Colors.black,),
+                              Icon(
+                                Icons.emoji_emotions_rounded,
+                                color: isactive1 ? Colors.white : Colors.black,
+                              ),
                               const SizedBox(width: 10.0),
-                              Text('Emotions',
+                              Text(
+                                'Emotions',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: isactive1 ? Colors.white : Colors.black,
-                                ),),
+                                  color:
+                                      isactive1 ? Colors.white : Colors.black,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -245,8 +264,12 @@ class _HomePageState extends State<HomePage> {
                             });
                           },
                           style: ButtonStyle(
-                            backgroundColor:  MaterialStateProperty.all<Color>(isactive2 ? Colors.deepOrangeAccent: Colors.white),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                isactive2
+                                    ? Colors.deepOrangeAccent
+                                    : Colors.white),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: const BorderSide(color: Colors.black),
@@ -256,12 +279,17 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.music_note_sharp,color: isactive2 ? Colors.white : Colors.black,),
+                              Icon(
+                                Icons.music_note_sharp,
+                                color: isactive2 ? Colors.white : Colors.black,
+                              ),
                               const SizedBox(width: 10.0),
-                              Text('Music',
+                              Text(
+                                'Music',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: isactive2 ? Colors.white : Colors.black,
+                                  color:
+                                      isactive2 ? Colors.white : Colors.black,
                                 ),
                               ),
                             ],
