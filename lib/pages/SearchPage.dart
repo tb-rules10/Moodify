@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:demo_music/models/API-Model.dart';
 import 'package:demo_music/components/videoPlayer.dart';
 import '../constants.dart';
+import'../api_key.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -21,7 +22,6 @@ class _SearchPageState extends State<SearchPage> {
   List<Video> videos = [];
 
   searchYoutube(String query) async {
-    const apiKey = "AIzaSyCZB6jgkENt3fNy5PIY4LYGPJT5TfHn8XE";
     var url = "https://www.googleapis.com/youtube/v3/search"
         "?part=snippet"
         "&maxResults=15"
@@ -31,7 +31,7 @@ class _SearchPageState extends State<SearchPage> {
 
     var response = await http.get(Uri.parse(url));
     var decodedJson = jsonDecode(response.body);
-
+    // print(url);
     setState(() {
       videos = decodedJson['items'].map<Video>((item) {
         return Video.fromJson(item);

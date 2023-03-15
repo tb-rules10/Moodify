@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:demo_music/models/RadioModel.dart';
+import '../models/RadioModel.dart';
 import '../constants.dart';
 
 class RadioHS extends StatefulWidget {
