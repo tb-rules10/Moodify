@@ -1,16 +1,14 @@
-# demo_music
+# Moodify
 
-A new Flutter project.
+Emotion based Music Recommendation System.
 
-## Getting Started
+## DFD
 
-This project is a starting point for a Flutter application.
+- ### Level 0
+<img width="361" alt="image" src="https://user-images.githubusercontent.com/58645688/232446749-bb5b274a-a8a1-4b1e-9288-0c8a44224ac3.png">
 
-A few resources to get you started if this is your first Flutter project:
+- ### Level 1
+<img width="876" alt="image" src="https://user-images.githubusercontent.com/58645688/232446925-ba21e847-06e3-41cc-9231-4889a2eae306.png">
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- ### Level 2
+<img width="876" alt="image" src="https://user-images.githubusercontent.com/58645688/232447058-6c0da6c6-f331-45ea-baa6-111aefcf114c.png">
