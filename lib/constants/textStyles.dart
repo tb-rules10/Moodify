@@ -11,9 +11,9 @@ var kOnboardingTextStyle = GoogleFonts.outfit(
 
 var kOnboardingButtonTextStyle = GoogleFonts.outfit(
   textStyle: TextStyle(
-    fontSize: 20.0,
-    color: Colors.white,
-    fontWeight: FontWeight.w300,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
   ),
 );
 
@@ -25,10 +25,3 @@ var kRegisterButtonTextStyle = GoogleFonts.outfit(
   ),
 );
 
-var kGoogleButtonTextStyle = GoogleFonts.outfit(
-  textStyle: TextStyle(
-    fontSize: 20.0,
-    color: Colors.white,
-    fontWeight: FontWeight.w600,
-  ),
-);

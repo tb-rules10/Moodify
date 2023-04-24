@@ -3,6 +3,11 @@ import 'package:moodify/constants/boxStyles.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/buttons.dart';
 import '../constants/textStyles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import '../components/inputFields.dart';
+import 'HomeScreen.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -12,174 +17,141 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool loader = false;
+  bool isError = false;
+  String errorMessage = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  void preAuth(){
+    isError = false;
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+    setState(() {
+      loader = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        height: height,
-        width: width,
-        decoration: kBoxDecoration,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              height: height*0.35,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(45.0),
-                    bottomRight: Radius.circular(45.0),
-                )
-              ),
+      resizeToAvoidBottomInset: true,
+      body: ModalProgressHUD(
+        inAsyncCall: loader,
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Container(
+              height: height,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  SizedBox(
-                    width: width,
-                  ),
-                  Container(
-                    child: Image.asset(
-                      "assets/images/appicon.png",
-                    ),
-                    height: height * 0.12,
-                  ),
-                  Text(
-                    "Let's Get Started!",
-                    style: GoogleFonts.outfit(
-                      textStyle: TextStyle(
-                        fontSize: 35.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w800,
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 25),
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 42,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextInputField(
+                          emailController: emailController,
+                          hintText: "Enter your email",
+                          labelText: "Email",
+                          padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                          borderRadius: 8,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      TextInputField(
+                          emailController: passwordController,
+                          hintText: "Enter your password",
+                          labelText: "Password",
+                          borderRadius: 8,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      Visibility(
+                        visible: isError,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 50, right: 50),
+                          child: Text(
+                            errorMessage,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.outfit(
+                              textStyle: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  OnboardButton(
+                      width: width*0.45,
+                      height: height*0.08,
+                      padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                      title: "Register",
+                      textStyle: kOnboardingButtonTextStyle,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      borderRadius: 50.0,
+                      onPressed: () async {
+                        preAuth();
+                        try{
+                          final newUser = await _auth.createUserWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          ).timeout(const Duration(seconds: 2));
+                          if(newUser != null){
+                            setState(() {
+                              loader = false;
+                            });
+                            Navigator.pushNamed(context, HomeScreen.id);
+                          }
+                        }
+                        on FirebaseAuthException catch (e){
+                          setState(() {
+                            loader = false;
+                            errorMessage = e.message.toString();
+                            isError = true;
+                          });
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(content: Text(e.toString()))
+                          // );
+                        }
+                        catch(e){
+                          setState(() {
+                            loader = false;
+                            errorMessage = "An error occured. Try Again Later";
+                            isError = true;
+                          });
+                        }
+                      },
+                  ),
+                  SizedBox(
+                    height: height*0.3,
                   ),
                 ],
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TextInputField(
-                    emailController: emailController,
-                    hintText: "Enter your email",
-                    labelText: "Email",
-                ),
-                TextInputField(
-                    emailController: passwordController,
-                    hintText: "Enter your password",
-                    labelText: "Password",
-                ),
-
-              ],
-            ),
-            Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Already a user?",
-                      style:  GoogleFonts.outfit(
-                        textStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: (){},
-                      child: Text(
-                        "Log In",
-                        style:  GoogleFonts.outfit(
-                          textStyle: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                OnboardButton(
-                    width: width,
-                    height: height*0.08,
-                    padding: EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 5),
-                    title: "Register",
-                    textStyle: kRegisterButtonTextStyle,
-                    backgroundColor: Colors.white,
-                    borderRadius: 16.0,
-                    onPressed: (){},
-                ),
-
-                // OnboardButton(
-                //     width: width,
-                //     height: height*0.08,
-                //     padding: EdgeInsets.only(left: 25, right: 25, bottom: 25, top: 5),
-                //     title: "Sign In with Google",
-                //     textStyle:kGoogleButtonTextStyle,
-                //     backgroundColor: Colors.transparent,
-                //     borderColor: Colors.white,
-                //     borderRadius: 16.0,
-                //     onPressed: (){},
-                // ),
-
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class TextInputField extends StatelessWidget {
-  const TextInputField({
-    super.key,
-    required this.emailController,
-    required this.labelText,
-    required this.hintText,
-  });
-
-  final TextEditingController emailController;
-  final String hintText;
-  final String labelText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(25.0),
-      child: TextField(
-        controller: emailController,
-        style:  GoogleFonts.outfit(
-          textStyle: TextStyle(
-            fontSize: 20.0,
-            color: Colors.white,
-            fontWeight: FontWeight.w300,
           ),
-        ),
-        decoration: InputDecoration(
-            hintText: hintText,
-            labelText: labelText,
-            labelStyle: TextStyle(color: Colors.grey),
-            hintStyle: TextStyle(color: Colors.grey),
-            fillColor: Colors.black,
-            filled: true,
-            contentPadding: const EdgeInsets.all(25.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 3,
-                  color: Colors.black
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(15.0))
-            ),
         ),
       ),
     );

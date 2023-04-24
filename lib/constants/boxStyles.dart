@@ -5,6 +5,9 @@ const kBoxDecoration = BoxDecoration(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [
+      // Color(0xFF1E272C),
+      // Color(0xFF1E272C),
+
       Color(0xFF1B252E),
       Color(0xFF1C252D),
       Color(0xFF081016),
