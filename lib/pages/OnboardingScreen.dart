@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:moodify/pages/HomeScreen.dart';
-import 'package:moodify/pages/LoginScreen.dart';
-import 'package:moodify/pages/RegisterScreen.dart';
+import 'package:moodify/pages/BottomNavbar.dart';
+import 'package:moodify/pages/AppScreens/HomeScreen.dart';
+import 'package:moodify/pages/AuthenticationScreens/LoginScreen.dart';
+import 'package:moodify/pages/AuthenticationScreens/RegisterScreen.dart';
 import '../components/buttons.dart';
 import '../constants/textStyles.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -86,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       idToken: userData.idToken
                     );
                     var result = await _auth.signInWithCredential(credential);
-                    print(result);
+                    Navigator.pushNamed(context, BottomNavbar.id);
                   }).catchError((error){
                     print(error);
                     ScaffoldMessenger.of(context).showSnackBar(

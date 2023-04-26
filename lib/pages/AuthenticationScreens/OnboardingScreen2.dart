@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:moodify/pages/OnboardingScreen.dart';
-import 'package:moodify/pages/RegisterScreen.dart';
-import '../constants/textStyles.dart';
+import 'package:moodify/pages/AuthenticationScreens/RegisterScreen.dart';
+import '../../constants/textStyles.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../components/buttons.dart';
+import '../../components/buttons.dart';
 
 class OnboardingScreen2 extends StatefulWidget {
   static String id = "OnboardingScreen2";

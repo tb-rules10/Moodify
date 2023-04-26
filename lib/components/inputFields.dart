@@ -1,6 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class SearchInputField extends StatelessWidget {
+  const SearchInputField({
+    super.key,
+    required this.myController,
+    required this.hintText,
+    required this.onSubmitted,
+    this.borderRadius,
+  });
+
+  final TextEditingController myController;
+  final String hintText;
+  final void Function(String?) onSubmitted;
+  final double? borderRadius;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: myController,
+      style: TextStyle(color: Colors.black),
+      cursorColor: Colors.black,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: TextStyle(color: Colors.black),
+        fillColor: Colors.white,
+        filled: true,
+        prefixIcon: Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
+        border: OutlineInputBorder(
+            borderSide:
+            BorderSide(width: 3, color: Colors.transparent),
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 10))
+        ),
+      ),
+      onSubmitted: onSubmitted,
+    );
+  }
+}
+
+
 class TextInputField extends StatelessWidget {
   const TextInputField({
     super.key,

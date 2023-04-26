@@ -15,10 +15,12 @@ class AppTheme{
       )
   );
 
-  static ThemeData darkTheme = ThemeData(
+  static ThemeData darkTheme = ThemeData.dark().copyWith(
       scaffoldBackgroundColor: Color(0xFF07040A),
       textTheme: const TextTheme(
-        bodyMedium: TextStyle(color: Colors.white),
+        // bodyMedium: TextStyle(color: Colors.white),
+        // bodyLarge: TextStyle(color: Colors.white),
+        // bodySmall: TextStyle(color: Colors.white),
       ),
       colorScheme: ColorScheme.fromSwatch().copyWith(
         primary: Color(0xFFB80454),

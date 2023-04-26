@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:moodify/pages/HomeScreen.dart';
-import 'package:moodify/pages/LoginScreen.dart';
+import 'package:moodify/pages/AppScreens/RecommendationScreen.dart';
+import 'package:moodify/pages/BottomNavbar.dart';
+import 'package:moodify/pages/AppScreens/HomeScreen.dart';
+import 'package:moodify/pages/AuthenticationScreens/LoginScreen.dart';
 import 'constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'pages/RegisterScreen.dart';
+import 'pages/AuthenticationScreens/RegisterScreen.dart';
 import 'pages/OnboardingScreen.dart';
 
 
@@ -24,12 +26,15 @@ class Moodify extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: HomeScreen.id,
+      initialRoute: BottomNavbar.id,
       routes: {
         OnboardingScreen.id: (context) => OnboardingScreen(),
         RegisterScreen.id: (context) => RegisterScreen(),
         LoginScreen.id: (context) => LoginScreen(),
+        BottomNavbar.id: (context) => BottomNavbar(),
         HomeScreen.id: (context) => HomeScreen(),
+        RecommendationScreen.id: (context) => RecommendationScreen(),
+
 
 
 
