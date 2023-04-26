@@ -6,9 +6,11 @@ class GoBackButton extends StatelessWidget {
   const GoBackButton({
     super.key,
     this.padding = const EdgeInsets.only(left: 25, top: 25),
+    this.iconSize,
   });
 
   final EdgeInsets padding;
+  final double? iconSize;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,10 +21,10 @@ class GoBackButton extends StatelessWidget {
             onTap: (){
               Navigator.pop(context);
             },
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back,
               color: Colors.white,
-              size: 42,
+              size: iconSize ?? 42,
             ),
           ),
         ),

@@ -6,8 +6,11 @@ import '../../utils/API-Model.dart';
 import '../../components/videoPlayer.dart';
 import '../../components/inputFields.dart';
 import '../../api_key.dart';
+import '../../constants/textStyles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
+  static String id = "SearchScreen";
   const SearchScreen({Key? key}) : super(key: key);
 
   @override
@@ -19,8 +22,41 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController myController = TextEditingController();
   bool showResults = false;
   List<RecentSearch> recentSearches = [];
-  // List<RecentSearch> recentSearches = [];
   List<Video> videos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getRecentSearches();
+  }
+  @override
+  void dispose() async{
+    print(recentSearches);
+    saveRecentSearches();
+    super.dispose();
+  }
+
+  Future<void> saveRecentSearches() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> data = [];
+    for(var search in recentSearches){
+      data.add(jsonEncode(search));
+    }
+    prefs.setStringList('recentSearches', data);
+  }
+
+  Future<void> getRecentSearches() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? searches = prefs.getStringList('recentSearches');
+    if(searches != null){
+      for(String search in searches){
+        var json = jsonDecode(search);
+        setState(() {
+          recentSearches.add(RecentSearch.fromJson(json));
+        });
+      }
+    }
+  }
 
   searchYoutube(String query) async {
     var url = "https://www.googleapis.com/youtube/v3/search"
@@ -31,14 +67,17 @@ class _SearchScreenState extends State<SearchScreen> {
         "&key=$apiKey";
 
     var response = await http.get(Uri.parse(url));
+    print(response.body.runtimeType);
+    print(response.runtimeType);
     var decodedJson = jsonDecode(response.body);
-    // print(url);
+    print(decodedJson.runtimeType);
     setState(() {
       videos = decodedJson['items'].map<Video>((item) {
         return Video.fromJson(item);
       }).toList();
     });
   }
+
   moreResults(String query) async {
     var url = "https://www.googleapis.com/youtube/v3/search"
         "?part=snippet"
@@ -58,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   String trimTitle(String str) {
-    int index = str.indexOf(new RegExp(r'[\(|\|]'));
+    int index = str.indexOf(RegExp(r'[\(|\|]'));
     return index == -1 ? str : str.substring(0, index);
   }
 
@@ -105,23 +144,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         myController: myController,
                         hintText: "What do you want to listen to?",
                         borderRadius: 5,
-                        onChanged: (query) {
+                        onSubmitted: (query) {
                           if (query != null) {
                             setState(() {
                               showResults = true;
                             });
                             searchYoutube(query);
-                            moreResults(query);
+                            // moreResults(query);
                           }
                         },
-                        // onEditingComplete: () {
-                        //   if (myController.text != null) {
-                        //     setState(() {
-                        //       showResults = true;
-                        //     });
-                        //     searchYoutube(myController.text);
-                        //   }
-                        // },
                       ),
                     ),
                   ),
@@ -159,38 +190,29 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     title: Text(
                       trimTitle(videos[index].title),
-                      style: GoogleFonts.outfit(
-                          textStyle: TextStyle(
-                        color: Colors.white,
-                      )),
+                      style: kMusicTitleTextStyle,
                     ),
                     subtitle: Text(
                       videos[index].channelTitle,
-                      style: GoogleFonts.outfit(
-                          textStyle: TextStyle(
-                        color: Colors.grey,
-                      )),
+                      style: kMusicInfoTextStyle,
                     ),
                     trailing: Icon(Icons.more_vert, color: Colors.white,),
-                    // trailing: Icon(Icons.play_arrow, color: Colors.white,),
-                    // shape: const RoundedRectangleBorder(
-                    //   side: BorderSide(color: Colors.transparent),
-                    // ),
                     onTap: () => {
-                      recentSearches.add(RecentSearch(
+                      recentSearches.insert(0, RecentSearch(
                           id: videos[index].id,
-                          title: videos[index].title,
-                          thumbnailUrl: videos[index].thumbnailUrl)),
-                      // print("##############################################################################################################################################################"),
-                      // print(videos[index].id),
-                      // print(videos[index].title),
-                      // print(videos[index].thumbnailUrl),
-                      // print("##############################################################################################################################################################"),
+                          channelTitle: videos[index].channelTitle,
+                          title: trimTitle(videos[index].title),
+                          thumbnailUrl: videos[index].thumbnailUrl,
+                      ),
+                      ),
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => VideoPlayerScreen(
                             videoId: videos[index].id,
+                            thumbnailUrl: videos[index].thumbnailUrl,
+                            title: trimTitle(videos[index].title),
+                            channelTitle: videos[index].channelTitle,
                           ),
                         ),
                       )
@@ -205,10 +227,21 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: Image.network(recentSearches[index].thumbnailUrl),
-                    subtitle: null,
-                    title: Text(videos[index].title),
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.transparent),
+                    subtitle: Text(
+                      recentSearches[index].channelTitle,
+                      style: kMusicInfoTextStyle,
+                    ),
+                    title: Text(
+                        recentSearches[index].title,
+                        style: kMusicTitleTextStyle,
+                    ),
+                    trailing: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          recentSearches.remove(recentSearches[index]);
+                        });
+                      },
+                      child: Icon(Icons.close_sharp, color: Colors.grey,),
                     ),
                     onTap: () => {
                       Navigator.push(
@@ -216,6 +249,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         MaterialPageRoute(
                           builder: (context) => VideoPlayerScreen(
                             videoId: recentSearches[index].id,
+                            thumbnailUrl: recentSearches[index].thumbnailUrl,
+                            title: recentSearches[index].title,
+                            channelTitle: recentSearches[index].channelTitle,
                           ),
                         ),
                       )
@@ -227,3 +263,5 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
+

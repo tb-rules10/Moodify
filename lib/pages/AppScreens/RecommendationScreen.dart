@@ -19,15 +19,15 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, height * 0.06, 20, 0),
+          padding: EdgeInsets.fromLTRB(20, height * 0.04, 20, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               GoBackButton(
-                padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 0),
+                padding: EdgeInsets.fromLTRB(0, 25, 0, 20),
               ),
               Text(
-                "How are you feeling?",
+                "Music Recommendation System",
                 textAlign: TextAlign.left,
                 style: GoogleFonts.outfit(
                   textStyle: TextStyle(
@@ -42,7 +42,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
               ),
               SearchInputField(
                 myController: myController,
-                hintText: "What do you want to listen to?",
+                hintText: "How are you feeling?",
                 onSubmitted: (query){
 
                 },

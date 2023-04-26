@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:moodify/pages/OnboardingScreen.dart';
-import 'package:moodify/pages/AuthenticationScreens/RegisterScreen.dart';
+import 'package:moodify/pages/delete/RegisterScreen.dart';
 import '../../constants/textStyles.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../components/buttons.dart';

@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:moodify/pages/AuthenticationScreens/AuthenticationScreen.dart';
 import 'package:moodify/pages/BottomNavbar.dart';
 import 'package:moodify/pages/AppScreens/HomeScreen.dart';
-import 'package:moodify/pages/AuthenticationScreens/LoginScreen.dart';
-import 'package:moodify/pages/AuthenticationScreens/RegisterScreen.dart';
+import 'package:moodify/pages/delete/LoginScreen.dart';
+import 'package:moodify/pages/delete/RegisterScreen.dart';
 import '../components/buttons.dart';
 import '../constants/textStyles.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,7 +59,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   borderRadius: 50.0,
                   padding: EdgeInsets.all(16),
                   onPressed: (){
-                    Navigator.pushNamed(context, RegisterScreen.id);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AuthenticationScreen(
+                          isNewUser: true,
+                        ),
+                      ),
+                    );
                   },
               ),
               SignInButton(
@@ -131,7 +139,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   TextButton(
                     onPressed: (){
-                      Navigator.pushNamed(context, LoginScreen.id);
+                      Navigator.pushNamed(
+                          context,
+                          AuthenticationScreen.id,
+                      );
                     },
                     child: Text(
                       "Log In",

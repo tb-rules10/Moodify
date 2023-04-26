@@ -25,3 +25,14 @@ var kRegisterButtonTextStyle = GoogleFonts.outfit(
   ),
 );
 
+var kMusicTitleTextStyle = GoogleFonts.outfit(
+    textStyle: TextStyle(
+      color: Colors.white,
+    ));
+
+var kMusicInfoTextStyle = GoogleFonts.outfit(
+    textStyle: TextStyle(
+      color: Colors.grey,
+    ));
+
+

@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pushNamed(context, RecommendationScreen.id);
                 },
                 child: Container(
-                  height: height*0.13,
+                  height: height*0.135,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(10.0),
