@@ -76,19 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                // width: (showResults) ? width*0.785 : width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0.0, horizontal: 0),
-                  child: SearchInputField(
-                      myController: myController,
-                      hintText: "What do you want to listen to?",
-                      onSubmitted: (query){
+              SearchInputField(
+                  myController: myController,
+                  hintText: "What do you want to listen to?",
+                  onSubmitted: (query){
 
-                      },
-                  ),
-                ),
+                  },
               ),
               const SizedBox(
                 height: 25,

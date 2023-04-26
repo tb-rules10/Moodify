@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import '../../utils/API-Model.dart';
@@ -24,7 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   searchYoutube(String query) async {
     var url = "https://www.googleapis.com/youtube/v3/search"
         "?part=snippet"
-        "&maxResults=15"
+        "&maxResults=7"
         "&q=$query"
         "&type=video"
         "&key=$apiKey";
@@ -38,6 +39,28 @@ class _SearchScreenState extends State<SearchScreen> {
       }).toList();
     });
   }
+  moreResults(String query) async {
+    var url = "https://www.googleapis.com/youtube/v3/search"
+        "?part=snippet"
+        "&maxResults=7"
+        "&q=$query"
+        "&type=video"
+        "&key=$apiKey";
+
+    var response = await http.get(Uri.parse(url));
+    var decodedJson = jsonDecode(response.body);
+    // print(url);
+    setState(() {
+      videos.addAll(decodedJson['items'].map<Video>((item) {
+        return Video.fromJson(item);
+      }).toList());
+    });
+  }
+
+  String trimTitle(String str) {
+    int index = str.indexOf(new RegExp(r'[\(|\|]'));
+    return index == -1 ? str : str.substring(0, index);
+  }
 
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -45,14 +68,14 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: 150,
+        toolbarHeight: height*0.175,
         elevation: 0,
         flexibleSpace: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                height: 25,
+                height: height*0.025,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +84,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (showResults)
                     MaterialButton(
                       shape: CircleBorder(),
-                      color: Colors.orange,
+                      color: Theme.of(context).colorScheme.primary,
                       padding: EdgeInsets.all(15.0),
                       child: const Icon(
                         Icons.arrow_back,
@@ -74,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                     ),
                   Container(
-                    width: (showResults) ? width*0.785 : width,
+                    width: (showResults) ? width * 0.785 : width,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 0.0, horizontal: 15),
@@ -82,14 +105,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         myController: myController,
                         hintText: "What do you want to listen to?",
                         borderRadius: 5,
-                        onSubmitted: (query) {
-                          if(query != null){
+                        onChanged: (query) {
+                          if (query != null) {
                             setState(() {
                               showResults = true;
                             });
                             searchYoutube(query);
+                            moreResults(query);
                           }
                         },
+                        // onEditingComplete: () {
+                        //   if (myController.text != null) {
+                        //     setState(() {
+                        //       showResults = true;
+                        //     });
+                        //     searchYoutube(myController.text);
+                        //   }
+                        // },
                       ),
                     ),
                   ),
@@ -116,61 +148,81 @@ class _SearchScreenState extends State<SearchScreen> {
         // decoration: kBoxDecoration,
         child: (showResults)
             ? ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: videos.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: Image.network(videos[index].thumbnailUrl),
-              title: Text(videos[index].title),
-              subtitle: Text(videos[index].channelTitle),
-              shape: const RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent),
-              ),
-              onTap: () => {
-                recentSearches.add(RecentSearch(id: videos[index].id, title: videos[index].title, thumbnailUrl: videos[index].thumbnailUrl)),
-                // print("##############################################################################################################################################################"),
-                // print(videos[index].id),
-                // print(videos[index].title),
-                // print(videos[index].thumbnailUrl),
-                // print("##############################################################################################################################################################"),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VideoPlayerScreen(
-                      videoId: videos[index].id,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: videos.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image.network(
+                      videos[index].thumbnailUrl,
+                      height: 120,
                     ),
-                  ),
-                )
-              },
-            );
-          },
-        )
+                    title: Text(
+                      trimTitle(videos[index].title),
+                      style: GoogleFonts.outfit(
+                          textStyle: TextStyle(
+                        color: Colors.white,
+                      )),
+                    ),
+                    subtitle: Text(
+                      videos[index].channelTitle,
+                      style: GoogleFonts.outfit(
+                          textStyle: TextStyle(
+                        color: Colors.grey,
+                      )),
+                    ),
+                    trailing: Icon(Icons.more_vert, color: Colors.white,),
+                    // trailing: Icon(Icons.play_arrow, color: Colors.white,),
+                    // shape: const RoundedRectangleBorder(
+                    //   side: BorderSide(color: Colors.transparent),
+                    // ),
+                    onTap: () => {
+                      recentSearches.add(RecentSearch(
+                          id: videos[index].id,
+                          title: videos[index].title,
+                          thumbnailUrl: videos[index].thumbnailUrl)),
+                      // print("##############################################################################################################################################################"),
+                      // print(videos[index].id),
+                      // print(videos[index].title),
+                      // print(videos[index].thumbnailUrl),
+                      // print("##############################################################################################################################################################"),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoPlayerScreen(
+                            videoId: videos[index].id,
+                          ),
+                        ),
+                      )
+                    },
+                  );
+                },
+              )
             : ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: recentSearches.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading:Image.network(recentSearches[index].thumbnailUrl),
-              subtitle: null,
-              title: Text(videos[index].title),
-              shape: const RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent),
-              ),
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VideoPlayerScreen(
-                      videoId: recentSearches[index].id,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: recentSearches.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image.network(recentSearches[index].thumbnailUrl),
+                    subtitle: null,
+                    title: Text(videos[index].title),
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.transparent),
                     ),
-                  ),
-                )
-              },
-            );
-          },
-        ),
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VideoPlayerScreen(
+                            videoId: recentSearches[index].id,
+                          ),
+                        ),
+                      )
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

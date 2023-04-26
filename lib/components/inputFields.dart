@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,13 +8,15 @@ class SearchInputField extends StatelessWidget {
     super.key,
     required this.myController,
     required this.hintText,
-    required this.onSubmitted,
+    this.onSubmitted,
+    this.onChanged,
     this.borderRadius,
   });
 
   final TextEditingController myController;
   final String hintText;
-  final void Function(String?) onSubmitted;
+  final void Function(String?)? onSubmitted;
+  final void Function(String?)? onChanged;
   final double? borderRadius;
 
 
@@ -37,7 +41,8 @@ class SearchInputField extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 10))
         ),
       ),
-      onSubmitted: onSubmitted,
+      onSubmitted: onSubmitted ?? onChanged,
+      onChanged: onChanged,
     );
   }
 }
