@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 class SearchInputField extends StatelessWidget {
   const SearchInputField({
     super.key,
-    required this.myController,
+    this.myController,
     required this.hintText,
     this.onSubmitted,
     this.onChanged,
     this.borderRadius,
   });
 
-  final TextEditingController myController;
+  final TextEditingController? myController;
   final String hintText;
   final void Function(String?)? onSubmitted;
   final void Function(String?)? onChanged;

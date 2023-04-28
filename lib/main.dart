@@ -5,10 +5,8 @@ import 'package:moodify/pages/AppScreens/SearchScreen.dart';
 import 'package:moodify/pages/AuthenticationScreens/AuthenticationScreen.dart';
 import 'package:moodify/pages/BottomNavbar.dart';
 import 'package:moodify/pages/AppScreens/HomeScreen.dart';
-import 'package:moodify/pages/delete/LoginScreen.dart';
 import 'constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'pages/delete/RegisterScreen.dart';
 import 'pages/OnboardingScreen.dart';
 
 
@@ -28,7 +26,7 @@ class Moodify extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: OnboardingScreen.id,
+      initialRoute: BottomNavbar.id,
       routes: {
         OnboardingScreen.id: (context) => OnboardingScreen(),
         AuthenticationScreen.id: (context) => AuthenticationScreen(),

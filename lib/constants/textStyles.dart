@@ -11,9 +11,9 @@ var kOnboardingTextStyle = GoogleFonts.outfit(
 
 var kOnboardingButtonTextStyle = GoogleFonts.outfit(
   textStyle: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w600,
-      color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
   ),
 );
 
@@ -25,14 +25,18 @@ var kRegisterButtonTextStyle = GoogleFonts.outfit(
   ),
 );
 
-var kMusicTitleTextStyle = GoogleFonts.outfit(
+var kMusicTitleStyle = GoogleFonts.outfit(
     textStyle: TextStyle(
-      color: Colors.white,
-    ));
+  color: Colors.white,
+));
 
-var kMusicInfoTextStyle = GoogleFonts.outfit(
+var kMusicInfoStyle = GoogleFonts.outfit(
     textStyle: TextStyle(
-      color: Colors.grey,
-    ));
+  color: Colors.grey,
+));
 
-
+var kMusicTimerStyle = GoogleFonts.outfit(
+    textStyle: TextStyle(
+      color: Colors.white.withOpacity(0.5),
+      // color: Colors.red,
+));

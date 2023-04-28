@@ -3,13 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:moodify/components/buttons.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../constants/functions.dart';
+import '../constants/textStyles.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
   final String videoId;
   final String thumbnailUrl;
   final String channelTitle;
   final String title;
-
 
   VideoPlayerScreen({
     required this.videoId,
@@ -24,9 +25,12 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late YoutubePlayerController _controller;
-  late bool isPlaying = true;
+  bool isPlaying = true;
+  bool isVideoFinished = false;
   bool showVideo = true;
   int toggleSwitch = 0;
+  int videoStart = 0;
+  int videoEnd = 0;
 
 
   @override
@@ -38,9 +42,28 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       initialVideoId: widget.videoId,
       flags: const YoutubePlayerFlags(
         autoPlay: true,
+        hideThumbnail: true,
         mute: false,
+        hideControls: true,
       ),
-    );
+    )..addListener(() {
+      videoEnd = _controller.metadata.duration.inSeconds;
+      setState(() {
+        videoStart = _controller.value.position.inSeconds;
+      });
+      if (videoStart == videoEnd-1 && videoEnd != 0) {
+          setState(() {
+            isVideoFinished = true;
+          });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -111,7 +134,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     child: YoutubePlayer(
                       controller: _controller,
                       showVideoProgressIndicator: false,
-
                     ),
                   ),
                 ],
@@ -146,19 +168,40 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                   ),
                   // Text("-------------------------------------------------------------------------------"),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-                    child: ProgressBar(
-                      controller: _controller,
-                      colors: ProgressBarColors(
-                        backgroundColor: Colors.white.withOpacity(0.3),
-                        bufferedColor: Colors.white.withOpacity(0.2),
-                        playedColor: Theme.of(context).colorScheme.primary,
-                        handleColor: Theme.of(context).colorScheme.primary,
-                      ),
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 20.0),
+                    child: Column(
+                      children: [
+                        ProgressBar(
+                          controller: _controller,
+                          colors: ProgressBarColors(
+                            backgroundColor: Colors.white.withOpacity(0.3),
+                            bufferedColor: Colors.white.withOpacity(0.2),
+                            playedColor: Theme.of(context).colorScheme.primary,
+                            handleColor: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                formatDuration(videoStart),
+                                style: kMusicTimerStyle,
+                              ),
+                              Text(
+                                  formatDuration(videoEnd),
+                                style: kMusicTimerStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   SizedBox(
-                    height: 8,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -169,24 +212,36 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         color: Colors.white.withOpacity(0.2),
                         padding: EdgeInsets.all(10.0),
                         child: Icon(
-                          Icons.navigate_before,
+                          Icons.rotate_left,
                           size: 30,
                         ),
                         onPressed: () {
-
+                          _controller.seekTo(Duration(
+                              seconds:
+                              _controller.value.position.inSeconds - 10));
                         },
                       ),MaterialButton(
                         shape: CircleBorder(),
                         color: Theme.of(context).colorScheme.primary,
                         padding: EdgeInsets.all(18.0),
-                        child: Icon(
-                          (isPlaying) ? Icons.pause : Icons.play_arrow,
-                          size: 30,
+                        child: Hero(
+                          tag: 'play',
+                          child: Icon(
+                            (isVideoFinished) ? Icons.replay :
+                            (isPlaying) ? Icons.pause : Icons.play_arrow,
+                            size: 30,
+                          ),
                         ),
                         onPressed: () {
                           setState(() {
-                            (isPlaying) ? _controller.pause() : _controller.play();
-                            isPlaying = !isPlaying;
+                            if(isVideoFinished) {
+                              _controller.seekTo(Duration(seconds: 0));
+                              isVideoFinished = false;
+                            }
+                            else{
+                              (isPlaying) ? _controller.pause() : _controller.play();
+                              isPlaying = !isPlaying;
+                            }
                           });
                         },
                       ),MaterialButton(
@@ -195,11 +250,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         color: Colors.white.withOpacity(0.2),
                         padding: EdgeInsets.all(10.0),
                         child: Icon(
-                          Icons.navigate_next,
+                          Icons.forward_10,
                           size: 30,
                         ),
-                        onPressed: () {
-
+                        onPressed:  () {
+                          _controller.seekTo(Duration(
+                              seconds:
+                              _controller.value.position.inSeconds + 10));
                         },
                       ),
 

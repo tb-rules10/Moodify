@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   TextEditingController myController = TextEditingController();
   bool showResults = false;
-  List<RecentSearch> recentSearches = [];
+  List<Songs> recentSearches = [];
   List<Video> videos = [];
 
   @override
@@ -31,7 +31,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
   @override
   void dispose() async{
-    print(recentSearches);
     saveRecentSearches();
     super.dispose();
   }
@@ -47,12 +46,15 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> getRecentSearches() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getStringList('recentSearches').runtimeType);
     List<String>? searches = prefs.getStringList('recentSearches');
     if(searches != null){
       for(String search in searches){
+        print(search);
+        print(search.runtimeType);
         var json = jsonDecode(search);
         setState(() {
-          recentSearches.add(RecentSearch.fromJson(json));
+          recentSearches.add(Songs.fromJson(json));
         });
       }
     }
@@ -190,15 +192,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     title: Text(
                       trimTitle(videos[index].title),
-                      style: kMusicTitleTextStyle,
+                      style: kMusicTitleStyle,
                     ),
                     subtitle: Text(
                       videos[index].channelTitle,
-                      style: kMusicInfoTextStyle,
+                      style: kMusicInfoStyle,
                     ),
                     trailing: Icon(Icons.more_vert, color: Colors.white,),
                     onTap: () => {
-                      recentSearches.insert(0, RecentSearch(
+                      recentSearches.insert(0, Songs(
                           id: videos[index].id,
                           channelTitle: videos[index].channelTitle,
                           title: trimTitle(videos[index].title),
@@ -229,11 +231,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     leading: Image.network(recentSearches[index].thumbnailUrl),
                     subtitle: Text(
                       recentSearches[index].channelTitle,
-                      style: kMusicInfoTextStyle,
+                      style: kMusicInfoStyle,
                     ),
                     title: Text(
                         recentSearches[index].title,
-                        style: kMusicTitleTextStyle,
+                        style: kMusicTitleStyle,
                     ),
                     trailing: GestureDetector(
                       onTap: (){

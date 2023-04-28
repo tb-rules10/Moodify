@@ -24,16 +24,16 @@ class Video {
       };
 }
 
-class RecentSearch {
+class Songs {
   final String id;
   final String title;
   final String thumbnailUrl;
   final String channelTitle;
 
-  RecentSearch({required this.id, required this.channelTitle, required this.title, required this.thumbnailUrl});
+  Songs({required this.id, required this.channelTitle, required this.title, required this.thumbnailUrl});
 
-  factory RecentSearch.fromJson(Map<String, dynamic> json) {
-    return RecentSearch(
+  factory Songs.fromJson(Map<String, dynamic> json) {
+    return Songs(
       id: json['videoId'],
       title: json['title'],
       thumbnailUrl: json['thumbnailUrl'],
