@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:moodify/pages/AppScreens/RadioScreen.dart';
 import 'package:moodify/pages/AppScreens/RecommendationScreen.dart';
 import 'package:moodify/pages/AppScreens/SearchScreen.dart';
 import 'package:moodify/pages/AuthenticationScreens/AuthenticationScreen.dart';
@@ -26,7 +27,7 @@ class Moodify extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: BottomNavbar.id,
+      initialRoute: OnboardingScreen.idadd,
       routes: {
         OnboardingScreen.id: (context) => OnboardingScreen(),
         AuthenticationScreen.id: (context) => AuthenticationScreen(),
@@ -34,6 +35,7 @@ class Moodify extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         RecommendationScreen.id: (context) => RecommendationScreen(),
         SearchScreen.id: (context) => SearchScreen(),
+        RadioHS.id: (context) => RadioHS(),
 
 
 

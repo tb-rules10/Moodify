@@ -40,3 +40,12 @@ var kMusicTimerStyle = GoogleFonts.outfit(
       color: Colors.white.withOpacity(0.5),
       // color: Colors.red,
 ));
+
+var kPlaylistTileStyle = GoogleFonts.outfit(
+  textStyle: const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  )
+)
+;

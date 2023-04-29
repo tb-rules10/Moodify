@@ -15,7 +15,7 @@ class AppTheme{
       )
   );
 
-  static ThemeData darkTheme = ThemeData.dark().copyWith(
+  static ThemeData darkTheme = ThemeData.dark(useMaterial3: false).copyWith(
       scaffoldBackgroundColor: Color(0xFF07040A),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,

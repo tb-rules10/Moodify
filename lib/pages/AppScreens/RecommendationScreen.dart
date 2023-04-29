@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moodify/components/buttons.dart';
+import '../../components/floatingActionButton.dart';
 import '../../components/inputFields.dart';
 import '../../components/videoPlayer.dart';
 import '../../constants/textStyles.dart';
@@ -53,14 +54,17 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
               SearchInputField(
                 hintText: "How are you feeling?",
                 onSubmitted: (query){
-                  postData(query!).then((results) {
-                    for(var result in results){
-                      var json = jsonDecode(result);
-                      setState(() {
-                        recommendations.add(Songs.fromJson(json));
-                      });
-                    }
-                  });
+                  query = query?.trimLeft();
+                  if(query != ""){
+                    postData(query!).then((results) {
+                      for(var result in results){
+                        var json = jsonDecode(result);
+                        setState(() {
+                          recommendations.add(Songs.fromJson(json));
+                        });
+                      }
+                    });
+                  }
                 },
               ),
             ],
@@ -135,39 +139,6 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
   }
 }
 
-class FloatingButton extends StatelessWidget {
-  FloatingButton({
-    super.key,
-    required this.padding,
-    required this.backgroundColor,
-    required this.iconData,
-    required this.onPressed,
-    required this.heroTag
-  });
-
-  final EdgeInsets padding;
-  final IconData iconData;
-  final Color backgroundColor;
-  final VoidCallback onPressed;
-  final String heroTag;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Container(
-        height: 65,
-        child: FittedBox(
-          child: FloatingActionButton(
-            heroTag: heroTag,
-            backgroundColor: backgroundColor,
-            child: Icon(iconData, size: 35,),
-            onPressed: onPressed,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 
 Future<List<String>> postData(String inputText) async {

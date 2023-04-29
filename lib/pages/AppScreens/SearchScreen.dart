@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:moodify/pages/BottomNavbar.dart';
 import '../../utils/API-Model.dart';
 import '../../components/videoPlayer.dart';
 import '../../components/inputFields.dart';
@@ -11,8 +12,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchScreen extends StatefulWidget {
   static String id = "SearchScreen";
-  const SearchScreen({Key? key}) : super(key: key);
 
+  String? searchQuery;
+  SearchScreen({
+    this.searchQuery,
+  });
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -21,6 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   TextEditingController myController = TextEditingController();
   bool showResults = false;
+  bool fromHome = false;
   List<Songs> recentSearches = [];
   List<Video> videos = [];
 
@@ -28,6 +33,14 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     getRecentSearches();
+    if(widget.searchQuery != null){
+      searchYoutube(widget.searchQuery!);
+      setState(() {
+        myController.text = widget.searchQuery!;
+        showResults = true;
+        fromHome = true;
+      });
+    }
   }
   @override
   void dispose() async{
@@ -37,6 +50,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> saveRecentSearches() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // if(widget.searchQuery != null){
+    //   prefs.setString('prevSearch', widget.searchQuery!);
+    //   print(prefs.getString('prevSearch'));
+    // }
     List<String> data = [];
     for(var search in recentSearches){
       data.add(jsonEncode(search));
@@ -46,12 +63,18 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> getRecentSearches() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getStringList('recentSearches').runtimeType);
+    // if(prefs.getString('prevSearch') != widget.searchQuery){
+    //   searchYoutube(widget.searchQuery!);
+    //   setState(() {
+    //     myController.text = widget.searchQuery!;
+    //     showResults = true;
+    //     fromHome = true;
+    //   });
+    // }
     List<String>? searches = prefs.getStringList('recentSearches');
     if(searches != null){
       for(String search in searches){
-        print(search);
-        print(search.runtimeType);
+        // print(search);
         var json = jsonDecode(search);
         setState(() {
           recentSearches.add(Songs.fromJson(json));
@@ -69,32 +92,14 @@ class _SearchScreenState extends State<SearchScreen> {
         "&key=$apiKey";
 
     var response = await http.get(Uri.parse(url));
-    print(response.body.runtimeType);
-    print(response.runtimeType);
+    // print(response.body.runtimeType);
+    // print(response.runtimeType);
     var decodedJson = jsonDecode(response.body);
-    print(decodedJson.runtimeType);
+    // print(decodedJson.runtimeType);
     setState(() {
       videos = decodedJson['items'].map<Video>((item) {
         return Video.fromJson(item);
       }).toList();
-    });
-  }
-
-  moreResults(String query) async {
-    var url = "https://www.googleapis.com/youtube/v3/search"
-        "?part=snippet"
-        "&maxResults=7"
-        "&q=$query"
-        "&type=video"
-        "&key=$apiKey";
-
-    var response = await http.get(Uri.parse(url));
-    var decodedJson = jsonDecode(response.body);
-    // print(url);
-    setState(() {
-      videos.addAll(decodedJson['items'].map<Video>((item) {
-        return Video.fromJson(item);
-      }).toList());
     });
   }
 
@@ -109,7 +114,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: height*0.175,
+        toolbarHeight: height*0.18,
         elevation: 0,
         flexibleSpace: SafeArea(
           child: Column(
@@ -132,8 +137,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         size: 30,
                       ),
                       onPressed: () {
+                        (widget.searchQuery != null)? Navigator.pop(context) :
                         setState(() {
                           showResults = false;
+                          myController.clear();
                         });
                       },
                     ),
@@ -152,7 +159,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               showResults = true;
                             });
                             searchYoutube(query);
-                            // moreResults(query);
                           }
                         },
                       ),
@@ -198,7 +204,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       videos[index].channelTitle,
                       style: kMusicInfoStyle,
                     ),
-                    trailing: Icon(Icons.more_vert, color: Colors.white,),
+                    trailing: Icon(Icons.play_arrow, color: Colors.white,),
                     onTap: () => {
                       recentSearches.insert(0, Songs(
                           id: videos[index].id,
