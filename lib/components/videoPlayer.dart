@@ -212,7 +212,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         color: Colors.white.withOpacity(0.2),
                         padding: EdgeInsets.all(10.0),
                         child: Icon(
-                          Icons.rotate_left,
+                          Icons.replay_10,
                           size: 30,
                         ),
                         onPressed: () {

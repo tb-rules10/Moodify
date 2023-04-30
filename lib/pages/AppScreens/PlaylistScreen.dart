@@ -30,7 +30,13 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget.songs);
+    Future<Null>.delayed(Duration.zero, () {
+      if(widget.songs.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Internal Error, Server might be down"))
+        );
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -164,33 +170,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         ),
       ),
 
-      // floatingActionButton: FloatingButton(
-      //     backgroundColor: Theme.of(context).colorScheme.primary,
-      //     iconData: Icons.play_arrow,
-      //     padding: EdgeInsets.only(right: 0.0),
-      //     heroTag: "play",
-      //     onPressed: (){},
-      //   ),
-
-      // floatingActionButton: Row(
-      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //   children: [
-      //     FloatingButton(
-      //       backgroundColor: Colors.green,
-      //       iconData: Icons.playlist_add,
-      //       padding: EdgeInsets.only(left: 32.0),
-      //       heroTag: "playlist",
-      //       onPressed: (){},
-      //     ),
-      //     FloatingButton(
-      //       backgroundColor: Theme.of(context).colorScheme.primary,
-      //       iconData: Icons.play_arrow,
-      //       padding: EdgeInsets.only(right: 0.0),
-      //       heroTag: "play",
-      //       onPressed: (){},
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

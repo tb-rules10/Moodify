@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:moodify/pages/BottomNavbar.dart';
+import '../../constants/functions.dart';
 import '../../utils/API-Model.dart';
 import '../../components/videoPlayer.dart';
 import '../../components/inputFields.dart';
@@ -50,10 +51,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> saveRecentSearches() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // if(widget.searchQuery != null){
-    //   prefs.setString('prevSearch', widget.searchQuery!);
-    //   print(prefs.getString('prevSearch'));
-    // }
     List<String> data = [];
     for(var search in recentSearches){
       data.add(jsonEncode(search));
@@ -63,14 +60,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> getRecentSearches() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // if(prefs.getString('prevSearch') != widget.searchQuery){
-    //   searchYoutube(widget.searchQuery!);
-    //   setState(() {
-    //     myController.text = widget.searchQuery!;
-    //     showResults = true;
-    //     fromHome = true;
-    //   });
-    // }
     List<String>? searches = prefs.getStringList('recentSearches');
     if(searches != null){
       for(String search in searches){
@@ -101,11 +90,6 @@ class _SearchScreenState extends State<SearchScreen> {
         return Video.fromJson(item);
       }).toList();
     });
-  }
-
-  String trimTitle(String str) {
-    int index = str.indexOf(RegExp(r'[\(|\|]'));
-    return index == -1 ? str : str.substring(0, index);
   }
 
   Widget build(BuildContext context) {

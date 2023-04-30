@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moodify/pages/AppScreens/Dashboard.dart';
 import 'package:moodify/pages/AppScreens/PlaylistScreen.dart';
 import 'package:moodify/pages/AppScreens/RecommendationScreen.dart';
 import 'package:moodify/utils/API-Model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/playlistCard.dart';
 import '../../constants/textStyles.dart';
 import '../../components/inputFields.dart';
@@ -23,8 +26,20 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController myController = TextEditingController();
   bool isactive1 = true;
   bool isactive2 = false;
-  String username = "Emily";
+  String username = "User";
+  String photoUrl = "https://user-images.githubusercontent.com/58645688/235341154-ae99214b-c447-47e2-9c92-3f82abd7cdf9.png";
   bool loader = false;
+
+  Future<void> getDetails() async{
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      var name = user.displayName ?? username;
+      int index = name.indexOf(" ");
+      if(index!=-1) name =  name.substring(0, name.indexOf(" "));
+      username = name;
+      photoUrl = user.photoURL ?? photoUrl;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +66,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(
-                              "Hello $username",
-                              textAlign: TextAlign.left,
-                              style: GoogleFonts.outfit(
-                                textStyle: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.secondary,
-                                ),
-                              ),
+                            FutureBuilder(
+                              future: getDetails(),
+                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                return Text(
+                                  "Hello $username",
+                                  textAlign: TextAlign.left,
+                                  style: GoogleFonts.outfit(
+                                    textStyle: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 3,
@@ -75,9 +95,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              'assets/images/user-icon.png',
-                              height: 70,
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, Dashboard.id);
+                              },
+                              child: FutureBuilder(
+                                future: getDetails(),
+                                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                  return CircleAvatar(
+                                    radius: 28,
+                                    backgroundImage: NetworkImage(photoUrl),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         )
@@ -116,7 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10.0),
-
+                        border: Border.all(
+                          color: Colors.white, // set the border color with opacity
+                          width: 1.0, // set the border width
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -1,22 +1,28 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:moodify/pages/AppScreens/Dashboard.dart';
 import 'package:moodify/pages/AppScreens/RadioScreen.dart';
 import 'package:moodify/pages/AppScreens/RecommendationScreen.dart';
 import 'package:moodify/pages/AppScreens/SearchScreen.dart';
 import 'package:moodify/pages/AuthenticationScreens/AuthenticationScreen.dart';
 import 'package:moodify/pages/BottomNavbar.dart';
 import 'package:moodify/pages/AppScreens/HomeScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'pages/OnboardingScreen.dart';
 
 
+late bool isLoggedIn;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  isLoggedIn = await prefs.getBool('loggedIn') ?? false;
   runApp(Moodify());
 }
+
 
 class Moodify extends StatelessWidget {
 
@@ -27,7 +33,8 @@ class Moodify extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: OnboardingScreen.idadd,
+      // initialRoute: OnboardingScreen.id,
+      initialRoute: (isLoggedIn) ? BottomNavbar.id : OnboardingScreen.id ,
       routes: {
         OnboardingScreen.id: (context) => OnboardingScreen(),
         AuthenticationScreen.id: (context) => AuthenticationScreen(),
@@ -36,6 +43,7 @@ class Moodify extends StatelessWidget {
         RecommendationScreen.id: (context) => RecommendationScreen(),
         SearchScreen.id: (context) => SearchScreen(),
         RadioHS.id: (context) => RadioHS(),
+        Dashboard.id: (context) => Dashboard(),
 
 
 

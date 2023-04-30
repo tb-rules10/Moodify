@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moodify/pages/BottomNavbar.dart';
+import 'package:moodify/pages/OnboardingScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/buttons.dart';
 import '../../constants/textStyles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,11 +24,13 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool loader = false;
   bool isError = false;
   String errorMessage = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
 
   void preAuth(){
     isError = false;
@@ -57,11 +62,23 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
+                      Visibility(
+                        visible: widget.isNewUser,
+                        child: TextInputField(
+                          emailController: usernameController,
+                          hintText: "Enter your name",
+                          labelText: "Username",
+                          padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                          borderRadius: 8,
+                          fillColor: Theme.of(context).colorScheme.tertiary,
+                        ),
+                      ),
                       TextInputField(
                         emailController: emailController,
                         hintText: "Enter your email",
                         labelText: "Email",
-                        padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                        padding: (widget.isNewUser)
+                            ? EdgeInsets.only(left: 25, right: 25) : null,
                         borderRadius: 8,
                         fillColor: Theme.of(context).colorScheme.tertiary,
                       ),
@@ -99,9 +116,15 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     borderRadius: 50.0,
                     onPressed: () async {
-                      preAuth();
-                      try{
-                        final newUser = (widget.isNewUser) ?
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      print(prefs.getString("currentUser"));
+                      if(emailController.text.trimLeft() != ""
+                          && passwordController.text.trimLeft() != ""
+                          && (widget.isNewUser) ? usernameController.text.trimLeft() != "" : true
+                      ){
+                        preAuth();
+                        try{
+                          UserCredential  newUser = (widget.isNewUser) ?
                           await _auth.createUserWithEmailAndPassword(
                             email: emailController.text,
                             password: passwordController.text,
@@ -110,31 +133,39 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             email: emailController.text,
                             password: passwordController.text,
                           ).timeout(const Duration(seconds: 2));
-                        if(newUser != null){
+                          User? user = newUser.user;
+                          if(user != null){
+                            (widget.isNewUser)
+                                ? await user.updateDisplayName(usernameController.text)
+                                :null ;
+                            var name = user.displayName;
+                            int? index = name?.indexOf(" ");
+                            if(index!=-1) name =  name?.substring(0, name.indexOf(" "));
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            prefs.setBool("loggedIn", true);
+                            setState(() {
+                              loader = false;
+                            });
+                            Navigator.pushNamedAndRemoveUntil(context, BottomNavbar.id, ModalRoute.withName(OnboardingScreen.id));
+                          }
+                        }
+                        on FirebaseAuthException catch (e){
                           setState(() {
                             loader = false;
+                            errorMessage = e.message.toString();
+                            isError = true;
                           });
-                          Navigator.pushNamed(context, BottomNavbar.id);
+                        }
+                        catch(e){
+                          setState(() {
+                            loader = false;
+                            print(e);
+                            errorMessage = "An error occured. Try Again Later";
+                            isError = true;
+                          });
                         }
                       }
-                      on FirebaseAuthException catch (e){
-                        setState(() {
-                          loader = false;
-                          errorMessage = e.message.toString();
-                          isError = true;
-                        });
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //     SnackBar(content: Text(e.toString()))
-                        // );
-                      }
-                      catch(e){
-                        setState(() {
-                          loader = false;
-                          errorMessage = "An error occured. Try Again Later";
-                          isError = true;
-                        });
-                      }
-                    },
+                    }
                   ),
                   SizedBox(
                     height: height*0.3,
