@@ -62,14 +62,14 @@ class AlbumCards {
 var dailyMix = [
   AlbumCards(id: "1", title: "Daily Mix 1", iconUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/2/26/Black_Pink_-_Square_Up_artwork.png/220px-Black_Pink_-_Square_Up_artwork.png"),
   AlbumCards(id: "2", title: "Daily Mix 2", iconUrl: 'https://i.scdn.co/image/ab67616d0000b273e960ebdd55eff9ee95dc85fb'),
-  AlbumCards(id: "3", title: "Daily Mix 3", iconUrl: 'https://user-images.githubusercontent.com/58645688/235306357-fa861f29-3b7f-487e-9d22-5ea29e2a6da4.png'),
-  AlbumCards(id: "4", title: "Daily Mix 4", iconUrl: 'https://user-images.githubusercontent.com/58645688/235306351-381b260f-83cb-4875-bd68-c054713f157f.png'),
-  AlbumCards(id: "5", title: "Daily Mix 5",  iconUrl: 'https://user-images.githubusercontent.com/58645688/235306354-7065011f-a526-4fec-8a3e-97d39a4a6f1a.png'),
+  AlbumCards(id: "3", title: "Daily Mix 3", iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLyC_WrqH3dfkrifv9Uj494gjXGUzDDb4ydQ&usqp=CAU'),
+  AlbumCards(id: "4", title: "Daily Mix 4", iconUrl: 'https://www.musicinminnesota.com/wp-content/uploads/2022/01/Photo-from-Adobe-Stock.jpg'),
+  AlbumCards(id: "5", title: "Daily Mix 5",  iconUrl: 'https://cdn.dribbble.com/users/905938/screenshots/3441423/cover-4-vinyl-dribbble.jpg'),
 ];
 
 var albums = [
   AlbumCards(id: "1", title: "Desi Hip-Hop", iconUrl: "https://e1.pxfuel.com/desktop-wallpaper/866/656/desktop-wallpaper-hip-hop-rapper-in-pinterest-krsna.jpg"),
   AlbumCards(id: "2", title: "English Hip-Hop", iconUrl: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61LR7TXsUoL.jpg'),
   AlbumCards(id: "3", title: "English Songs", iconUrl: 'https://upload.wikimedia.org/wikipedia/en/a/a5/Closer_%28featuring_Halsey%29_%28Official_Single_Cover%29_by_The_Chainsmokers.png'),
-  AlbumCards(id: "4", title: "Classical Hindi Songs", iconUrl: 'https://static.vecteezy.com/system/resources/previews/004/540/570/original/t-shirt-design-slogan-typography-old-is-gold-with-tape-cassette-vintage-illustration-vector.jpg'),
+  AlbumCards(id: "4", title: "Classical Hindi Songs", iconUrl: 'https://img.wynk.in/unsafe/200x200/filters:no_upscale():strip_exif():format(jpg)/http://s3.ap-south-1.amazonaws.com/discovery-prod-arsenal/arsenal/artworks/64183928c91f9d41080a2364/COLLECTION_464298048435.png'),
 ];

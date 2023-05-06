@@ -43,11 +43,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Column(
                 children: <Widget>[
                   Text(
-                      "Enjoy Music",
+                      "Connect Your Emotions",
                       style: kOnboardingTextStyle
                   ),
                   Text(
-                    "Curated Just For You",
+                    "With Songs That You Love",
                     style: kOnboardingTextStyle,
                   ),
                 ],

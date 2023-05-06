@@ -64,12 +64,9 @@ class _RadioHSState extends State<RadioHS> {
         fit: StackFit.expand,
         children: <Widget>[
           AppBar(
-            title:
-            // Image.asset(
-            //   "assets/title.png",
-            //   height: 50,
-            // ),
-            const Text("Radio",
+            // toolbarHeight: 100,
+            automaticallyImplyLeading: false,
+            title: const Text("Radio",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
@@ -138,9 +135,7 @@ class _RadioHSState extends State<RadioHS> {
                         DecorationImage(
                             image: NetworkImage(rad.image),
                             fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(0.3),
-                                BlendMode.darken)),
+                            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken)),
                       )
                           .border()
                           .withRounded(value: 20.0)
@@ -165,9 +160,13 @@ class _RadioHSState extends State<RadioHS> {
               //       .orange800
               //       .makeCentered(),
               if (_isPlaying)
-                Image.asset(
-                  "assets/waves.gif",
-                  width: 100,
+                Container(
+                  child: FittedBox(
+                    child: Image.asset("assets/orange-music-wave-doodle.gif"),
+                    fit: BoxFit.fill
+                  ),
+                  width: 200,
+                  height: 50,
                 ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -185,7 +184,7 @@ class _RadioHSState extends State<RadioHS> {
                 }),
               ),
             ].vStack(),
-          ).pOnly(bottom: context.percentHeight * 6),
+          ).pOnly(bottom: context.percentHeight * 0),
         ],
       ),
     );

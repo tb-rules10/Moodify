@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 var kOnboardingTextStyle = GoogleFonts.outfit(
   textStyle: TextStyle(
-    fontSize: 30.0,
+    fontSize: 28.0,
     color: Colors.white,
     fontWeight: FontWeight.w500,
   ),

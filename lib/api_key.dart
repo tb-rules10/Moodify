@@ -1,5 +1,5 @@
 // GPT KEY
-const apiSecretKey = "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";
+const apiSecretKey = "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";
 // Youtube API
 // final apiKey = 'AIzaSyDGGwQIwdK4lhmnLyiB7fOZu7PjDWxbw0g';
 // final apiKey = 'AIzaSyDioRe27mhxtOgvoYySEseIn2is-P5lJQA';
@@ -18,4 +18,6 @@ const apiSecretKey = "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";
 // final apiKey = 'AIzaSyCGMeieS3bu68YG0X4K8ErXiVtZdVk3pKU';
 // final apiKey = 'AIzaSyCGMeieS3bu68YG0X4K8ErXiVtZdVk3pKU';
 
-final apiKey = 'AIzaSyDH9NcP2DR3NWeJ9Vxk8DjBGO9xOlLnteE';
+// final apiKey = 'AIzaSyDH9NcP2DR3NWeJ9Vxk8DjBGO9xOlLnteE';
+// final apiKey = 'AIzaSyCVW8GmKAagMcl0y6RUft9m3Ay1p5UO7xI';
+final apiKey = 'AIzaSyAHIitu2sTK0QFS_6GHMntnV82KTGnTBZI';

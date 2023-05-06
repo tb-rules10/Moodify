@@ -87,7 +87,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               return ListTile(
                   focusNode: focusNode,
                 leading: Image.network(widget.songs[index].thumbnailUrl,),
-                subtitle: Text(
+                subtitle: (widget.songs[index].channelTitle == "  ") ? null :
+                Text(
                   widget.songs[index].channelTitle,
                   style: kMusicInfoStyle,
                 ),

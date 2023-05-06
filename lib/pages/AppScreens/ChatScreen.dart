@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import '../../api_key.dart';
 
@@ -88,16 +89,19 @@ class _ChatPageState extends State<ChatPage> {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 100,
-          title: const Padding(
-            padding: EdgeInsets.all(3.0),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10),
             child: Text(
               "Assistant",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              style: GoogleFonts.outfit(
+                fontSize: 35,
+                textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
             ),
           ),
           backgroundColor: Colors.black87,
         ),
-        backgroundColor: backgroundColor,
+        // backgroundColor: backgroundColor,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(
@@ -136,6 +140,8 @@ class _ChatPageState extends State<ChatPage> {
               decoration: const InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
+                hintText: "Ask me anything...",
+                hintStyle: TextStyle(color: Colors.grey),
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -203,7 +209,6 @@ class _ChatPageState extends State<ChatPage> {
         controller: scrollController,
         itemBuilder: ((context, index) {
           var message = messages[messages.length - index - 1];
-          // var message = messages[index];
           return ChatMessageWidget(
             text: message.text,
             chatMessageType: message.chatMessageType,
@@ -256,13 +261,15 @@ class ChatMessageWidget extends StatelessWidget {
                     ),
                     child: Text(
                       text.trimLeft(),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      style: GoogleFonts.outfit(
+                        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: chatMessageType == ChatMessageType.bot
                               ? Colors.white
                               : Colors.black,
                           fontSize: 15
                         // fontWeight: FontWeight.bold,
                       ),
+                          ),
                     ),
                   ),
                 ],

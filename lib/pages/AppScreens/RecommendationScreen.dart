@@ -30,7 +30,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
         appBar: AppBar(
           // backgroundColor: Theme.of(context).colorScheme.primary,
           automaticallyImplyLeading: false,
-          toolbarHeight: height*0.3,
+          toolbarHeight: height*0.28,
           elevation: 0,
           flexibleSpace: Padding(
             padding: EdgeInsets.fromLTRB(20, height * 0.04, 20, 0),
@@ -45,7 +45,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                   textAlign: TextAlign.left,
                   style: GoogleFonts.outfit(
                     textStyle: TextStyle(
-                      fontSize: 30,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -55,7 +55,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                   height: 20,
                 ),
                 SearchInputField(
-                  hintText: "How are you feeling?",
+                  hintText: "What's going on in your life?",
                   onSubmitted: (query){
                     query = query?.trimLeft();
                     if(query != ""){
@@ -68,6 +68,7 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
                           for(var result in results){
                             var json = jsonDecode(result);
                             setState(() {
+                              loader = false;
                               recommendations.add(Songs.fromJson(json));
                             });
                           }
@@ -164,13 +165,13 @@ class _RecommendationScreenState extends State<RecommendationScreen> {
 
 Future<List<String>> postData(String inputText) async {
   try {
-    final url = Uri.parse('http://10.0.2.2:5000/api/predict');
+    final url = Uri.parse('https://moodify-backend.onrender.com/api/predict');
     Map<String, String> data = {'text': inputText};
     String body = jsonEncode(data);
     // Use `data` in request body if using Node.js server as backend
     // Use `body` in request body if using FastAPI server as backend
     final response =
-    await http.post(url, body: body).timeout(const Duration(seconds: 5));
+    await http.post(url, body: body).timeout(const Duration(seconds: 15));
     Map<String, dynamic> temp = await json.decode(response.body);
     // print(temp['data'].runtimeType);
     List<String> songs = List<String>.from(temp['data'] as List);

@@ -142,7 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.pushNamed(context, RecommendationScreen.id);
                     },
                     child: Container(
-                      height: height*0.135,
+                      height: 120,
+                      width: width,
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10.0),
@@ -154,22 +155,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: const [
-                                Icon(
-                                  Icons.more_horiz,
-                                  size: 30,
-                                )
-                              ],
+                            Visibility(
+                              // maintainSize: true,
+                              // maintainAnimation: true,
+                              // maintainState: true,
+                              visible: false,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: const [
+                                  Icon(
+                                    Icons.more_horiz,
+                                    size: 30,
+                                  )
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 12.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
                                   Text(
                                     "Get recommendations based on your mood",
                                     style: GoogleFonts.outfit(
@@ -191,6 +202,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey[400],
                                       ),
+                                    ),
+                                  ),
+                                  Visibility(
+                                    // maintainSize: true,
+                                    // maintainAnimation: true,
+                                    // maintainState: true,
+                                    // visible: false,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: const [
+                                        Icon(
+                                          Icons.navigate_next,
+                                          size: 30,
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -319,13 +345,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
 Future<List<String>> playlistsData(String urlPostfix, String type) async {
   try {
-    final url = Uri.parse('http://10.0.2.2:5000/api/$urlPostfix');
+    final url = Uri.parse('https://moodify-backend.onrender.com/api/$urlPostfix');
     Map<String, String> data = {'text': type};
     String body = jsonEncode(data);
     // Use `data` in request body if using Node.js server as backend
     // Use `body` in request body if using FastAPI server as backend
     final response =
-    await http.post(url, body: body).timeout(const Duration(seconds: 5));
+    await http.post(url, body: body).timeout(const Duration(seconds: 15));
     Map<String, dynamic> temp = await json.decode(response.body);
     // print(temp['data']);
     List<String> songs = List<String>.from(temp['data'] as List);
